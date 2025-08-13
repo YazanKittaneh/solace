@@ -173,6 +173,15 @@ const advocateData = [
     yearsOfExperience: 3,
     phoneNumber: 5559872345,
   },
+  {
+    firstName: "Yazan",
+    lastName: "Kittaneh",
+    city: "Chicago",
+    degree: "MSW",
+    specialties: specialties.slice(...randomSpecialty()),
+    yearsOfExperience: 5,
+    phoneNumber: 3127854427,
+  },
 ];
 
 export { advocateData };
