@@ -5,16 +5,25 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-if (!process.env.POSTGRES_URL) {
-  throw new Error('POSTGRES_URL environment variable is not set');
+let db: ReturnType<typeof drizzle> | null = null;
+
+if (process.env.POSTGRES_URL) {
+  try {
+    const client = postgres(process.env.POSTGRES_URL, {
+      max: 10,
+      idle_timeout: 20,
+      connect_timeout: 10,
+      ssl: false,
+    });
+    
+    db = drizzle(client, { schema });
+  } catch (error) {
+    console.warn('Failed to connect to database:', error);
+    console.warn('Application will run with limited functionality');
+  }
+} else {
+  console.warn('POSTGRES_URL not configured - database features disabled');
 }
 
-export const client = postgres(process.env.POSTGRES_URL, {
-  max: 10, // Maximum number of connections
-  idle_timeout: 20, // Close idle connections after 20 seconds
-  connect_timeout: 10, // Timeout when connecting
-  ssl: false, // Disable SSL for local development
-});
-
-const db = drizzle(client, { schema });
+export { db };
 export default db;
