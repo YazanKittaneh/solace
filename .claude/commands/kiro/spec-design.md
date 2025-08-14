@@ -105,7 +105,7 @@ graph TB
 ### Technology Stack
 [Based on research findings and requirements analysis]
 
-- **Frontend**: [React/Vue/Next.js] + [TypeScript]
+- **Frontend**: [React/Next.js] + [TypeScript]
 - **Backend**: [FastAPI/Express/Django] + [Language] 
 - **Database**: [PostgreSQL/MySQL/MongoDB]
 - **Authentication**: [JWT/OAuth/Auth0]

@@ -1,5 +1,5 @@
-import db from "..";
-import { advocates } from "../schema";
+// Database imports removed as they're not used in this data file
+// import { advocates } from "../schema";
 
 const specialties = [
   "Bipolar",
