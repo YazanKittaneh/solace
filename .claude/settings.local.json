@@ -6,7 +6,8 @@
       "Bash(git checkout:*)",
       "Bash(git add:*)",
       "Bash(npm run lint)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(npm test:*)"
     ],
     "deny": [],
     "defaultMode": "acceptEdits"
