@@ -1,3 +1,39 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals"
+  ],
+  "rules": {
+    // General rules for better code quality
+    "no-console": "warn",
+    "no-debugger": "error",
+    "no-unused-expressions": "error",
+    "prefer-const": "error",
+    "no-var": "error",
+    
+    // Next.js specific rules
+    "@next/next/no-html-link-for-pages": "error",
+    "@next/next/no-img-element": "warn"
+  },
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/app/api/**/*.ts",
+        "src/db/**/*.ts",
+        "src/db/**/*.js",
+        "src/lib/health.ts",
+        "src/lib/redis.ts",
+        "src/app/admin/**/*.tsx",
+        "src/app/error.tsx",
+        "src/components/ErrorBoundary.tsx"
+      ],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
 }
