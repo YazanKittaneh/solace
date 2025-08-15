@@ -31,7 +31,7 @@ We're working with two main specifications:
 
 ## Recent Changes and Design Decisions
 
-### 1. Added Results Table View for Search Results
+### 1. New Table View for Search Results
 **What:** Implemented a professional table view (`AdvocateTable.tsx`) that displays search results in a sortable, expandable table format instead of just returning raw data.
 
 **Why:** Users needed a structured way to view and compare multiple advocates after searching. The table format makes it easier to scan through results, sort by different criteria (name, location, experience), and access detailed information through expandable rows.
