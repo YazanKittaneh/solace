@@ -18,5 +18,22 @@
     "browser": true,
     "es2021": true,
     "node": true
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/app/api/**/*.ts",
+        "src/db/**/*.ts",
+        "src/db/**/*.js",
+        "src/lib/health.ts",
+        "src/lib/redis.ts",
+        "src/app/admin/**/*.tsx",
+        "src/app/error.tsx",
+        "src/components/ErrorBoundary.tsx"
+      ],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
 }

@@ -53,12 +53,16 @@ export default function AdvocateTable({
     return sortDirection === 'asc' ? comparison : -comparison;
   });
 
-  const toggleRowExpansion = (advocateId: string) => {
+  const getAdvocateKey = (advocate: Advocate) => {
+    return advocate.id ? advocate.id.toString() : `${advocate.firstName}-${advocate.lastName}-${advocate.phoneNumber}`;
+  };
+
+  const toggleRowExpansion = (advocateKey: string) => {
     const newExpandedRows = new Set(expandedRows);
-    if (newExpandedRows.has(advocateId)) {
-      newExpandedRows.delete(advocateId);
+    if (newExpandedRows.has(advocateKey)) {
+      newExpandedRows.delete(advocateKey);
     } else {
-      newExpandedRows.add(advocateId);
+      newExpandedRows.add(advocateKey);
     }
     setExpandedRows(newExpandedRows);
   };
@@ -134,7 +138,7 @@ export default function AdvocateTable({
             </h2>
             {searchQuery && (
               <p className="text-sm text-gray-600 mt-1">
-                Results for: <span className="font-medium">"{searchQuery}"</span>
+                Results for: <span className="font-medium">&ldquo;{searchQuery}&rdquo;</span>
               </p>
             )}
           </div>
@@ -195,13 +199,14 @@ export default function AdvocateTable({
           
           <tbody className="bg-white divide-y divide-gray-200">
             {sortedAdvocates.map((advocate) => {
-              const isExpanded = expandedRows.has(advocate.id);
+              const advocateKey = getAdvocateKey(advocate);
+              const isExpanded = expandedRows.has(advocateKey);
               return (
-                <React.Fragment key={advocate.id}>
+                <React.Fragment key={advocateKey}>
                   <tr className="hover:bg-gray-50 transition-colors duration-150">
                     <td className="px-4 py-4">
                       <button
-                        onClick={() => toggleRowExpansion(advocate.id)}
+                        onClick={() => toggleRowExpansion(advocateKey)}
                         className="text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600"
                         aria-label={isExpanded ? 'Collapse details' : 'Expand details'}
                       >

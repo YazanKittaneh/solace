@@ -92,7 +92,7 @@ export default function HeroSection({
 
         {/* Description */}
         <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
-          Describe your situation in your own words. We'll help you find the right healthcare advocate 
+          Describe your situation in your own words. We&apos;ll help you find the right healthcare advocate 
           to guide you through insurance claims, medical billing, disability support, and more.
         </p>
 

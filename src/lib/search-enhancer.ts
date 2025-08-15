@@ -273,13 +273,21 @@ export class SearchEnhancer {
    * @returns SearchFilters object
    */
   generateSearchFilters(searchTerms: SearchTerms): SearchFilters {
-    return {
+    const result: SearchFilters = {
       specialtyMatches: searchTerms.specialties,
       keywordMatches: searchTerms.keywords,
-      locationFilter: searchTerms.location,
-      experienceMin: searchTerms.experience,
       textSearch: searchTerms.keywords.join(' ')
     };
+    
+    if (searchTerms.location !== undefined) {
+      result.locationFilter = searchTerms.location;
+    }
+    
+    if (searchTerms.experience !== undefined) {
+      result.experienceMin = searchTerms.experience;
+    }
+    
+    return result;
   }
 
   /**
@@ -306,7 +314,9 @@ export class SearchEnhancer {
     // Simple cache size management
     if (this.searchCache.size >= this.CACHE_SIZE_LIMIT) {
       const firstKey = this.searchCache.keys().next().value;
-      this.searchCache.delete(firstKey);
+      if (firstKey !== undefined) {
+        this.searchCache.delete(firstKey);
+      }
     }
     
     this.searchCache.set(cacheKey, results);

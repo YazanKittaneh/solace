@@ -211,7 +211,7 @@ export default function LandingPageContainer({
           </div>
           {searchState.lastQuery && (
             <p className="mt-2 text-sm text-blue-600 text-center">
-              Query: "{searchState.lastQuery}"
+              Query: &ldquo;{searchState.lastQuery}&rdquo;
             </p>
           )}
         </div>
@@ -275,7 +275,7 @@ export default function LandingPageContainer({
                 No Results Found
               </h3>
               <p className="mt-1 text-sm text-yellow-700">
-                We couldn't find any advocates matching "{searchState.lastQuery}". 
+                We couldn&apos;t find any advocates matching &ldquo;{searchState.lastQuery}&rdquo;. 
                 Try using different keywords or browse the examples below.
               </p>
             </div>

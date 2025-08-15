@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import LandingPageContainer from '../components/LandingPage/LandingPageContainer';
 import SearchFilterBar from '../components/Results/SearchFilterBar';
 import AdvocateTable from '../components/Results/AdvocateTable';
@@ -26,7 +25,6 @@ export default function LandingPage() {
   const [currentQuery, setCurrentQuery] = useState<string>('');
   const [isSearching, setIsSearching] = useState(false);
   
-  const router = useRouter();
   const searchEnhancer = new SearchEnhancer();
 
   useEffect(() => {
@@ -47,7 +45,7 @@ export default function LandingPage() {
         setApiSource(result.source);
         
         if (result.error) {
-          console.warn('API Warning:', result.error);
+          // API returned with warning - data still available
         }
         
       } catch (error) {
@@ -55,7 +53,7 @@ export default function LandingPage() {
           ? error.message 
           : 'An unexpected error occurred while fetching advocates';
         
-        console.error('Error fetching advocates:', error);
+        // Error already captured in errorMessage for user display
         setError(errorMessage);
         setAdvocates([]); // Fallback to empty array
         
@@ -68,8 +66,6 @@ export default function LandingPage() {
   }, []);
 
   const handleSearchResults = (results: Advocate[], query: string) => {
-    console.log(`Search completed: "${query}" returned ${results.length} results`);
-    
     setSearchResults(results);
     setCurrentQuery(query);
     setViewMode('results');
@@ -80,13 +76,11 @@ export default function LandingPage() {
   };
 
   const handleSearchStart = (query: string) => {
-    console.log(`Starting search for: "${query}"`);
     setIsSearching(true);
     setCurrentQuery(query);
   };
 
-  const handleSearchError = (error: Error, query: string) => {
-    console.error(`Search error for "${query}":`, error);
+  const handleSearchError = (_error: Error, _query: string) => {
     setIsSearching(false);
   };
 
@@ -109,7 +103,6 @@ export default function LandingPage() {
       setSearchResults(results);
       setIsSearching(false);
     } catch (error) {
-      console.error('Search error:', error);
       setIsSearching(false);
     }
   };

@@ -116,24 +116,27 @@ function generateRandomSpecialties(): string[] {
 }
 
 // Helper function to generate random phone number
-function generatePhoneNumber(): string {
+function generatePhoneNumber(): number {
   // Generate area code (200-999)
   const areaCode = Math.floor(Math.random() * 800) + 200;
   // Generate exchange (200-999)
   const exchange = Math.floor(Math.random() * 800) + 200;
   // Generate subscriber number (0000-9999)
-  const subscriber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+  const subscriber = Math.floor(Math.random() * 10000);
   
-  return `${areaCode}${exchange}${subscriber}`;
+  return parseInt(`${areaCode}${exchange}${subscriber.toString().padStart(4, '0')}`);
 }
 
 // Function to generate a single advocate
 function generateAdvocate() {
+  const cityIndex = Math.floor(Math.random() * cities.length);
+  const degreeIndex = Math.floor(Math.random() * degrees.length);
+  
   return {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
-    city: cities[Math.floor(Math.random() * cities.length)],
-    degree: degrees[Math.floor(Math.random() * degrees.length)],
+    city: cities[cityIndex] || 'Unknown',
+    degree: degrees[degreeIndex] || 'Unknown',
     specialties: generateRandomSpecialties(),
     yearsOfExperience: Math.floor(Math.random() * 35) + 1, // 1-35 years
     phoneNumber: generatePhoneNumber(),

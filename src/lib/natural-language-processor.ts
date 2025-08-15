@@ -33,13 +33,21 @@ export class NaturalLanguageProcessor {
     // 7. Calculate confidence score
     const confidence = this.calculateConfidence(keywords, specialties, intent);
     
-    return {
+    const result: SearchTerms = {
       specialties,
       keywords,
-      location,
-      experience,
       confidence
     };
+    
+    if (location !== undefined) {
+      result.location = location;
+    }
+    
+    if (experience !== undefined) {
+      result.experience = experience;
+    }
+    
+    return result;
   }
 
   /**
