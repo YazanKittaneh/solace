@@ -10,7 +10,7 @@
   - Create `.env.example` with required environment variables for database and caching
   - _Requirements: US-010_
 
-- [ ] 2. Set up enhanced database infrastructure with performance monitoring
+- [x] 2. Set up enhanced database infrastructure with performance monitoring
   - Create optimized `drizzle.config.ts` with connection pooling and migration settings
   - Update `src/db/index.ts` with connection pool configuration and fallback handling
   - Create database health check utility in `src/lib/health.ts` for monitoring
@@ -20,12 +20,12 @@
 
 ## Frontend Component Architecture
 
-- [ ] 3. Create Next.js App Router layout with performance optimization
+- [x] 3. Create Next.js App Router layout with performance optimization
   - Implement `src/app/layout.tsx` with Server Components and metadata optimization
   - Create responsive navigation component with accessibility features
   - Add global error boundary with user-friendly error messages
   - Implement loading states and progressive enhancement patterns
-  - Configure font optimization and performance monitoring
+  - Configure font optimization
   - _Requirements: US-005, US-007, US-008, US-014_
 
 - [ ] 4. Build server-rendered advocate list page with initial data loading

@@ -5,8 +5,10 @@
       "Bash(npx drizzle-kit:*)",
       "Bash(git checkout:*)",
       "Bash(git add:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(npm run:*)"
     ],
-    "deny": []
+    "deny": [],
+    "defaultMode": "acceptEdits"
   }
 }

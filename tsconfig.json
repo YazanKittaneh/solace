@@ -32,6 +32,8 @@
       }
     ],
     
+    "baseUrl": ".",
+    
     // Enhanced path mapping for better organization
     "paths": {
       "@/*": ["./src/*"],

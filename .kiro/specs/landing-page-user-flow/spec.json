@@ -1,0 +1,30 @@
+{
+  "name": "landing-page-user-flow",
+  "title": "Landing Page User Flow Enhancement",
+  "description": "Transform the current advocate listing into a conversational landing page that starts with 'What do you need support with?' allowing users to describe their needs in natural language",
+  "language": "english",
+  "created_at": "2025-01-15T00:00:00Z",
+  "updated_at": "2025-01-15T12:00:00Z",
+  "phase": "tasks-generated",
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": true
+    },
+    "design": {
+      "generated": true,
+      "approved": true
+    },
+    "tasks": {
+      "generated": true,
+      "approved": true
+    }
+  },
+  "metadata": {
+    "feature_type": "user_experience_enhancement",
+    "complexity": "medium",
+    "estimated_effort": "4 weeks",
+    "dependencies": ["existing-advocate-search", "next-js-app-router"],
+    "affected_components": ["homepage", "search-functionality", "navigation"]
+  }
+}
