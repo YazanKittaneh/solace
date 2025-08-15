@@ -1,119 +1,93 @@
-# Database Setup and Configuration Changes
+# DISCUSSIONS.md
 
-## Overview
-This document summarizes the changes made to set up and configure the PostgreSQL database for the Solace Assignment application, along with explanations for why each change was necessary.
+Thank you for looking over my project code. My inital implement of the project was based around handling large numbers of advocates, and making the table and search very quick. However, I quickly realized it doesn't matter how quick the table is, I am not going to scroll down a list of 10,000 enteries. So i've pivoted to building for the initial user experience. It boiled down to "tell me naturlaly what you want, and I'll share best matches". I leaned into Claude Code a lot because this project was easily translatable to the Kiro style spec driven development - which nicley counteracts the AI slop code most one shot agents provide. Here's a quick introduction to this system, followed by feature list, and finally future features.  
 
-## Changes Made
+## Kiro Spec-Driven Development
 
-### 1. Database Creation
-**What:** Created the `solaceassignment` PostgreSQL database in the Docker container.
+### What is Kiro?
+Kiro is a spec-driven development methodology that ensures systematic, well-documented feature implementation. It breaks down complex projects into manageable phases with clear requirements, design decisions, and implementation tasks. We are basically replicating Amazon's Kiro IDE implementation.
 
-**Why:** The application requires a PostgreSQL database to store advocate data. The database name `solaceassignment` matches the configuration in the connection string.
 
-**Command:**
-```bash
-docker exec -i solace-candidate-assignment-main-db-1 psql -U postgres -c "CREATE DATABASE solaceassignment;"
-```
+### How We Use Kiro
+The `.kiro/` directory contains our project specifications, each following a structured format:
+- **Requirements** - Clear business and technical requirements with acceptance criteria
+- **Design** - Architectural decisions and technical approach documentation
+- **Tasks** - Granular implementation steps with requirement traceability
 
-### 2. Database Schema Migration
-**What:** Pushed the Drizzle ORM schema to create the `advocates` table in the database.
+### Why This Approach?
 
-**Why:** The application needs a structured table to store advocate information including personal details, specialties, and experience. The schema defines:
-- Personal info fields: firstName, lastName, city, phoneNumber
-- Professional fields: degree, yearsOfExperience
-- Specialties stored as JSONB array (payload field)
-- Automatic timestamp tracking (createdAt)
+**Clarity**: Every feature starts with clear requirements before any code is written, preventing scope creep and ensuring alignment with business needs.
 
-**Command:**
-```bash
-npx drizzle-kit push
-```
+**Traceability**: Each task links back to specific requirements, making it easy to understand why code exists and what business value it provides.
 
-### 3. Created Seed Script (`src/db/seed/index.ts`)
-**What:** Created a new TypeScript seed script to populate the database with test data.
+**Progress Tracking**: Tasks can be marked as completed, providing clear visibility into project status and remaining work.
 
-**Why:** The application needed a way to populate the database with initial advocate data for testing and development. The seed script:
-- Clears existing data to ensure a clean state
-- Inserts 15 sample advocates with randomized specialties
-- Provides consistent test data for development
+**Knowledge Transfer**: New engineers can quickly understand the project's architecture and reasoning by reviewing the specs, not just the code.
 
-**Key Features:**
-- Error handling for missing database connection
-- Proper field mapping from advocateData to database schema
-- Clear console output showing progress
+### Current Specifications
+We're working with two main specifications:
+1. **landing-page-user-flow** - Defines the conversational search interface for finding healthcare advocates
+2. **nextjs-modernization** - Outlines the technical modernization to Next.js 14 with performance optimizations
 
-### 4. Modified Database Connection (`src/db/index.ts`)
-**What:** Updated the database setup function to return `null` instead of a mock object when DATABASE_URL is not set.
+## Recent Changes and Design Decisions
 
-**Why:** The previous implementation returned a mock object that didn't have all required Drizzle ORM methods, causing the seed script to fail. Returning `null` allows for cleaner error handling.
+### 1. New Table View for Search Results
+**What:** Implemented a professional table view (`AdvocateTable.tsx`) that displays search results in a sortable, expandable table format instead of just returning raw data.
 
-**Before:**
-```typescript
-return {
-  select: () => ({
-    from: () => [],
-  }),
-};
-```
+**Why:** Users needed a structured way to view and compare multiple advocates after searching. The table format makes it easier to scan through results, sort by different criteria (name, location, experience), and access detailed information through expandable rows.
 
-**After:**
-```typescript
-return null;
-```
+### 2. Implemented View Mode Transition System
+**What:** Created a transition system that switches from the conversational landing page interface to a dedicated results view with filter bar and table after search.
 
-### 5. SSL Configuration Fix (`src/db/drizzle.ts`)
-**What:** Changed SSL setting from `'require'` to `false` in the PostgreSQL connection configuration.
+**Why:** The conversational interface is great for initial search input, but once users have results, they need a professional interface focused on reviewing and refining their options. This separation provides the best experience for each stage of the user journey.
 
-**Why:** The local PostgreSQL Docker container doesn't use SSL/TLS encryption. The `ssl: 'require'` setting was causing connection failures with the error "Client network socket disconnected before secure TLS connection was established". For local development, SSL is not necessary.
+### 3. Added Search Refinement Filter Bar
+**What:** Built a sticky header bar (`SearchFilterBar.tsx`) that appears in results view with search refinement capabilities, quick filters, and result count.
 
-**Before:**
-```typescript
-ssl: 'require',
-```
+**Why:** Users often need to refine their initial search after seeing results. The filter bar keeps search context visible and allows quick adjustments without returning to the landing page, improving workflow efficiency.
 
-**After:**
-```typescript
-ssl: false, // Disable SSL for local development
-```
 
-### 6. Environment Configuration
-**What:** The `.env` file now contains both `DATABASE_URL` and `POSTGRES_URL` environment variables.
+## Design Philosophy
 
-**Why:** Different parts of the application may expect different environment variable names:
-- `DATABASE_URL` is a common convention used by many ORMs
-- `POSTGRES_URL` is specifically checked by the new `drizzle.ts` configuration
+These changes follow a user-centric approach where:
+- The interface adapts to the user's current task (searching vs. reviewing results)
+- Visual feedback is clear but not disruptive (white backgrounds, smooth transitions)
+- Common workflows are optimized (search refinement, sorting, contact actions)
+- Professional appearance is maintained throughout all states
 
-Both point to the same connection string: `postgresql://postgres:password@localhost/solaceassignment`
+## Future Considerations
 
-### 7. Added Personal Advocate Entry
-**What:** Added a new advocate entry for "Yazan Kittaneh" to the seed data in `src/db/seed/advocates.ts`.
+### Immediate Enhancements
+- Consider adding persistent search history for returning users
+- Explore advanced filtering options (multiple specialties, distance radius)
+- Potentially add saved searches or favorite advocates functionality
+- Consider pagination or virtual scrolling for large result sets
 
-**Why:** Personalization of test data, adding a 16th advocate to the existing 15 sample advocates.
+### Remaining Tasks from Landing Page User Flow
+- **Enhanced Search Results Display** - Build relevance scoring display with match highlighting and refined navigation
+- **Search Refinement Component** - Create query modification interface with search history and breadcrumb navigation
+- **No Results Handling** - Implement intelligent suggestions and fallback options when searches return no results
+- **Advanced Search Toggle** - Add ability to switch between natural language and structured search modes
+- **Performance Optimizations** - Implement caching, memoization, and lazy loading for sub-200ms search targets
+- **Navigation Updates** - Update navigation to highlight landing page as primary entry point with breadcrumbs
 
-## Database Seeding Process
+### Remaining Tasks from Next.js Modernization
+- **Server-Rendered Advocate List** - Build SSR-optimized page with virtual table and progressive enhancement
+- **Real-time Search Component** - Implement debounced search with 300ms delay and suggestion system
+- **Advanced Filtering Panel** - Create multi-select filters with URL state persistence
+- **Cursor-Based Pagination** - Implement infinite scroll option with performance optimization
+- **Full-Text Search Integration** - Connect search to PostgreSQL GIN indexes with ranking
+- **Database Layer Optimization** - Add Redis caching, connection pooling, and performance indexes
+- **API Layer Implementation** - Build comprehensive REST APIs for advocates, search, and filtering
+- **Performance Monitoring** - Add Core Web Vitals tracking and real user monitoring
+- **Testing Suite** - Create unit, integration, component, and E2E tests for 85%+ coverage
+- **Error Handling System** - Implement error boundaries with graceful degradation
+- **Mobile Optimization** - Create touch-optimized interactions with responsive breakpoints
+- **Security Implementation** - Add input validation, rate limiting, and security headers
 
-To seed the database with the advocate data, run:
-```bash
-DATABASE_URL=postgresql://postgres:password@localhost/solaceassignment npx tsx src/db/seed/index.ts
-```
-
-This command:
-1. Sets the DATABASE_URL environment variable inline
-2. Uses `tsx` (TypeScript execute) to run the seed script
-3. Clears existing advocates and inserts fresh test data
-
-## Results
-
-After all changes:
--  Database `solaceassignment` is created and accessible
--  `advocates` table schema is properly defined with all required fields
--  Database is populated with 16 test advocates
--  API endpoint at `/api/advocates` can successfully query the database (once SSL is disabled)
-
-## Considerations for Production
-
-When deploying to production, consider:
-1. **SSL/TLS:** Re-enable SSL for database connections in production environments
-2. **Environment Variables:** Use secure methods to manage database credentials
-3. **Seed Data:** Production seeding should use real or more realistic test data
-4. **Connection Pooling:** The current configuration uses sensible defaults (max: 10 connections)
+### Infrastructure Improvements
+- **Database Schema Enhancement** - Implement PostgreSQL full-text search with tsvector columns
+- **Caching Strategy** - Add Redis caching layer with intelligent invalidation
+- **Connection Pooling** - Optimize database connections for performance
+- **Migration System** - Create automated database migration and rollback procedures
+- **Monitoring & Analytics** - Implement comprehensive performance and user behavior tracking
